@@ -1,7 +1,6 @@
-'use strict';
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
-const Repos = ({repos}) => {
+const Repos = ({ repos }) => {
   console.log('Repos: ', repos);
   return (
     <div>
@@ -9,7 +8,7 @@ const Repos = ({repos}) => {
     <ul className="list-group">
       {repos && repos.map((repo, index) => (
         <li key={index}
-            className="list-group-item"
+          className="list-group-item"
         >
         {repo.html_url && <h4><a href="repo.html_url">{repo.name}</a></h4>}
         {repo.description && <p>{repo.description}</p>}
@@ -21,7 +20,7 @@ const Repos = ({repos}) => {
 
 Repos.propTypes = {
   username: PropTypes.string.isRequired,
-  repos: PropTypes.array.isRequired
+  repos: PropTypes.array.isRequired,
 };
 
 export default Repos;

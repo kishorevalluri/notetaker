@@ -1,5 +1,4 @@
-'use strict';
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 export default class SearchGithub extends React.Component {
   constructor(props) {
@@ -16,13 +15,13 @@ export default class SearchGithub extends React.Component {
         <form onSubmit={() => this.handleSubmit()}>
           <div className="form-group col-sm-7">
             <input type="text"
-                className="form-control"
-                ref = {(ref) => this.usernameRef = ref}
+              className="form-control"
+              ref = {(ref) => this.usernameRef = ref}
             />
           </div>
           <div className="form-group col-sm-5">
             <button type="submit"
-                className="btn btn-block btn-primary"
+              className="btn btn-block btn-primary"
             >
             Search Github
             </button>
@@ -34,5 +33,5 @@ export default class SearchGithub extends React.Component {
 }
 
 SearchGithub.propTypes = {
-  history: PropTypes.object.isRequired
+  history: PropTypes.object.isRequired,
 };

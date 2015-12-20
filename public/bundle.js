@@ -24453,12 +24453,8 @@
 
 	exports.default = _react2.default.createElement(
 	  _reactRouter.Route,
-	  { path: '/',
-	    component: _Main2.default
-	  },
-	  _react2.default.createElement(_reactRouter.Route, { path: 'profile/:username',
-	    component: _Profile2.default
-	  }),
+	  { path: '/', component: _Main2.default },
+	  _react2.default.createElement(_reactRouter.Route, { path: 'profile/:username', component: _Profile2.default }),
 	  _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default })
 	);
 
@@ -24490,10 +24486,6 @@
 
 	var _Repos2 = _interopRequireDefault(_Repos);
 
-	var _firebase = __webpack_require__(216);
-
-	var _firebase2 = _interopRequireDefault(_firebase);
-
 	var _helpers = __webpack_require__(222);
 
 	var _helpers2 = _interopRequireDefault(_helpers);
@@ -24523,7 +24515,8 @@
 	    _this.state = {
 	      notes: [],
 	      bio: {},
-	      repos: []
+	      repos: [],
+	      error: ''
 	    };
 	    return _this;
 	  }
@@ -24537,31 +24530,20 @@
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      console.log('nextProps:  ', nextProps);
-	      base.removeBinding(this.ref);
+	      console.log('this.ref:  ', this.ref);
+	      if (this.ref) {
+	        base.removeBinding(this.ref);
+	        delete this.ref;
+	      }
 	      this.init(nextProps.params.username);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      base.removeBinding(this.ref);
-	    }
-	  }, {
-	    key: 'init',
-	    value: function init(username) {
-	      var _this2 = this;
-
-	      this.ref = base.bindToState(username, {
-	        context: this,
-	        asArray: true,
-	        state: 'notes'
-	      });
-
-	      (0, _helpers2.default)(username).then(function (data) {
-	        return _this2.setState({
-	          bio: data.bio,
-	          repos: data.repos
-	        });
-	      });
+	      if (this.ref) {
+	        base.removeBinding(this.ref);
+	        delete this.ref;
+	      }
 	    }
 	  }, {
 	    key: 'onAddNote',
@@ -24571,12 +24553,39 @@
 	      });
 	    }
 	  }, {
+	    key: 'init',
+	    value: function init(username) {
+	      var _this2 = this;
+
+	      (0, _helpers2.default)(username).then(function (data) {
+	        _this2.setState({
+	          bio: data.bio,
+	          repos: data.repos,
+	          error: ''
+	        });
+	        _this2.ref = base.bindToState(username, {
+	          context: _this2,
+	          asArray: true,
+	          state: 'notes'
+	        });
+	      }).catch(function (err) {
+	        console.log('Error: ', err);
+	        _this2.setState({
+	          notes: [],
+	          bio: {},
+	          repos: [],
+	          error: 'Not found..'
+	        });
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this3 = this;
 
-	      console.log(this.props);
-	      return _react2.default.createElement(
+	      console.log('Profile: ', this.props);
+	      console.log('State: ', this.state);
+	      return this.state.error === '' ? _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
 	        _react2.default.createElement(
@@ -24603,6 +24612,16 @@
 	            }
 	          })
 	        )
+	      ) : _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-danger' },
+	        _react2.default.createElement(
+	          'strong',
+	          null,
+	          'Error!'
+	        ),
+	        ' ',
+	        this.state.error
 	      );
 	    }
 	  }]);
@@ -24611,6 +24630,10 @@
 	})(_react2.default.Component);
 
 	exports.default = Profile;
+
+	Profile.propTypes = {
+	  params: _react.PropTypes.object.isRequired
+	};
 
 /***/ },
 /* 212 */
@@ -25128,7 +25151,7 @@
 /* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -25142,9 +25165,9 @@
 
 	var Home = function Home() {
 	  return _react2.default.createElement(
-	    'h2',
-	    { className: 'text-center' },
-	    'Search by Github'
+	    "h2",
+	    { className: "text-center" },
+	    "Search by Github"
 	  );
 	};
 
@@ -25154,7 +25177,7 @@
 /* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -25170,15 +25193,15 @@
 	  var notes = _ref.notes;
 
 	  return _react2.default.createElement(
-	    'div',
+	    "div",
 	    null,
 	    _react2.default.createElement(
-	      'ul',
-	      { className: 'list-group' },
+	      "ul",
+	      { className: "list-group" },
 	      notes.map(function (item, index) {
 	        return _react2.default.createElement(
-	          'li',
-	          { className: 'list-group-item',
+	          "li",
+	          { className: "list-group-item",
 	            key: index
 	          },
 	          item
@@ -25391,12 +25414,6 @@
 	function getGithubInfo(username) {
 	  return _axios2.default.all([getRepos(username), getUserInfo(username)]).then(function (arr) {
 	    return { repos: arr[0].data, bio: arr[1].data };
-	  }).catch(function (arr) {
-	    console.log('Error: ', arr);
-	    return {
-	      repos: [],
-	      bio: {}
-	    };
 	  });
 	}
 

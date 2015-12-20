@@ -1,15 +1,14 @@
-'use strict';
 import React from 'react';
 import SearchGithub from './SearchGithub';
 
-const Main = ({history, children}) => {
+const Main = ({ history, children }) => {
   return (
-    <div className='main-container'>
+    <div className="main-container">
       <nav className="navbar navbar-default"
-          role="navigation"
+        role="navigation"
       >
         <div className="col-sm-7 col-sm-offset-2"
-            style={{marginTop: 15}}
+          style={{ marginTop: 15 }}
         >
         <SearchGithub history={history}/>
         </div>

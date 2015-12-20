@@ -1,5 +1,4 @@
-'use strict';
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
 export default class AddNote extends React.Component {
   constructor(props) {
@@ -15,14 +14,14 @@ export default class AddNote extends React.Component {
     return (
       <div className="input-group">
         <input type="text"
-            className="form-control"
-            placeholder="Add New Note"
-            ref = {(ref) => {this.note = ref;}}
+          className="form-control"
+          placeholder="Add New Note"
+          ref = {(ref) => {this.note = ref;}}
         />
       <span className="input-group-btn">
         <button className="btn btn-default"
-            type="button"
-            onClick={this.handleSubmit.bind(this)}
+          type="button"
+          onClick={this.handleSubmit.bind(this)}
         >
         Submit
       </button>
@@ -33,5 +32,5 @@ export default class AddNote extends React.Component {
 
 AddNote.propTypes = {
   username: PropTypes.string.isRequired,
-  addNote: PropTypes.func.isRequired
+  addNote: PropTypes.func.isRequired,
 };

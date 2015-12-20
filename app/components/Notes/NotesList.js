@@ -1,12 +1,11 @@
-'use strict';
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
-const NotesList = ({notes}) => {
+const NotesList = ({ notes }) => {
   return (<div>
     <ul className="list-group">
       {notes.map((item, index) => (
           <li className="list-group-item"
-              key={index}
+            key={index}
           >
         {item}
       </li>
@@ -17,7 +16,7 @@ const NotesList = ({notes}) => {
 };
 
 NotesList.propTypes = {
-  notes: PropTypes.array.isRequired
+  notes: PropTypes.array.isRequired,
 };
 
 export default NotesList;

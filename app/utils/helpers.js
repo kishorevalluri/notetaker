@@ -1,4 +1,3 @@
-'use strict';
 import axios from 'axios';
 
 function getRepos(username) {
@@ -11,13 +10,5 @@ function getUserInfo(username) {
 
 export default function getGithubInfo(username) {
   return axios.all([getRepos(username), getUserInfo(username)])
-      .then((arr) => ({repos: arr[0].data, bio: arr[1].data}))
-      .catch((arr) => {
-        console.log('Error: ', arr);
-        return {
-          repos: [],
-          bio: {}
-        }
-      })
-      ;
+      .then((arr) => ({ repos: arr[0].data, bio: arr[1].data }));
 }

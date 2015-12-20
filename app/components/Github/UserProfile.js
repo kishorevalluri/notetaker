@@ -1,14 +1,13 @@
-'use strict';
-import React, {PropTypes} from 'react';
+import React, { PropTypes } from 'react';
 
-const UserProfile = ({bio}) => {
+const UserProfile = ({ bio }) => {
   console.log('User: ', bio);
   return (
     <div>
       <h3>USER</h3>
       {bio.avatar_url && <li className="list-group-item">
         <img className="img-rounded img-responsive"
-            src={bio.avatar_url}
+          src={ bio.avatar_url }
         />
         </li>}
       {bio.name && <li className="list-group-item">Name: {bio.name}</li>}
@@ -21,7 +20,7 @@ const UserProfile = ({bio}) => {
 
 UserProfile.propTypes = {
   username: PropTypes.string.isRequired,
-  bio: PropTypes.object.isRequired
+  bio: PropTypes.object.isRequired,
 };
 
 export default UserProfile;

@@ -1,9 +1,7 @@
-'use strict';
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Notes from './Notes/Notes';
 import UserProfile from './Github/UserProfile';
 import Repos from './Github/Repos';
-import Firebase from 'firebase';
 import getGithubInfo from '../utils/helpers';
 import Rebase from 're-base';
 
@@ -15,7 +13,8 @@ export default class Profile extends React.Component {
     this.state = {
       notes: [],
       bio: {},
-      repos: []
+      repos: [],
+      error: '',
     };
   }
   componentDidMount() {
@@ -23,51 +22,79 @@ export default class Profile extends React.Component {
   }
   componentWillReceiveProps(nextProps) {
     console.log('nextProps:  ', nextProps);
-    base.removeBinding(this.ref);
+    console.log('this.ref:  ', this.ref);
+    if (this.ref) {
+      base.removeBinding(this.ref);
+      delete this.ref;
+    }
     this.init(nextProps.params.username);
   }
   componentWillUnmount() {
-    base.removeBinding(this.ref);
+    if (this.ref) {
+      base.removeBinding(this.ref);
+      delete this.ref;
+    }
   }
-  init(username) {
-    this.ref = base.bindToState(username, {
-      context: this,
-      asArray: true,
-      state: 'notes'
-    });
 
-    getGithubInfo(username)
-      .then((data) => this.setState({
-        bio: data.bio,
-        repos: data.repos
-      }));
-  }
   onAddNote(newNote) {
     base.post(this.props.params.username, {
-      data: this.state.notes.concat([newNote])
+      data: this.state.notes.concat([newNote]),
     });
   }
+  init(username) {
+    getGithubInfo(username)
+      .then((data) => {
+        this.setState({
+          bio: data.bio,
+          repos: data.repos,
+          error: '',
+        });
+        this.ref = base.bindToState(username, {
+          context: this,
+          asArray: true,
+          state: 'notes',
+        });
+      })
+      .catch((err) => {
+        console.log('Error: ', err);
+        this.setState({
+          notes: [],
+          bio: {},
+          repos: [],
+          error: 'Not found..',
+        });
+      });
+  }
   render() {
-    console.log(this.props);
+    console.log('Profile: ', this.props);
+    console.log('State: ', this.state);
     return (
+      this.state.error === '' ?
       <div className="row">
         <div className="col-md-4">
           <UserProfile username={this.props.params.username}
-              bio = {this.state.bio}
+            bio = {this.state.bio}
           />
         </div>
         <div className="col-md-4">
           <Repos username = {this.props.params.username}
-              repos = {this.state.repos}
+            repos = {this.state.repos}
           />
         </div>
         <div className="col-md-4">
           <Notes username = {this.props.params.username}
-              notes = {this.state.notes}
-              addNote = {(newNote) => this.onAddNote(newNote)}
+            notes = {this.state.notes}
+            addNote = {(newNote) => this.onAddNote(newNote)}
           />
         </div>
       </div>
+      : <div className="alert alert-danger">
+          <strong>Error!</strong> {this.state.error}
+        </div>
     );
   }
 }
+
+Profile.propTypes = {
+  params: PropTypes.object.isRequired,
+};
